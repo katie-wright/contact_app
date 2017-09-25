@@ -1,8 +1,21 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class App extends Component {
+  componentWillMount(){
+    axios.put('http://localhost:8080/contacts/1', {updateInfo: {
+      lastName: "Wrightt",
+      email: "ka.wright@gmail.com"
+    }})
+    .then(res=>{
+      console.log(res.data);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
   render() {
     return (
       <div className="App">
