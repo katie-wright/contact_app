@@ -19,76 +19,49 @@ app.use(function(req, res, next) {
 });
 
 const contacts = [];
-function Contact(firstName, lastName, phoneNumber, email) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.phoneNumber = phoneNumber;
-    this.email = email;
-    this.fullName = firstName + lastName;
-
-    return this;
-}
 
 app.get('/contacts', (req,res)=>{
     res.json(contacts);
 });
 
-app.get('/contacts/:fullName', (req,res)=>{
+app.get('/contacts/:id', (req,res)=>{
     let contact = contacts.find(c=>{
-        return c.fullName.toLowerCase() === req.params.fullName.toLowerCase()
+        return c.id === req.params.id
     })
 
     res.json(contact);
 });
 
 app.post('/contacts', (req,res)=>{
-    let existingContact = contacts.find(c=>{
-        return c.fullName.toLowerCase() === req.body.firstName.toLowerCase()+req.body.lastName.toLowerCase()
-    });
-    if (!existingContact) {
-        let newContact = new Contact(req.body.firstName, req.body.lastName, req.body.phoneNumber, req.body.email);
-        contacts.push(newContact);
-
-        res.json(contacts);
+    let newContact = req.body;
+    if (contacts.length>0) {
+        newContact.id = contacts[contacts.length-1].id+1
     }
     else {
-        res.status(200);
-        res.send("Contact already exists");
+        newContact.id = 1;
     }
-    
-});
-
-app.put('/contacts/:fullName', (req,res)=>{
-    let updatedContact = req.body;
-    let newFullName = updatedContact.firstName + updatedContact.lastName;
-    updatedContact.fullName = newFullName;
-    if (req.params.fullName.toLowerCase() !== newFullName.toLowerCase()) {
-        let existingContact = contacts.find(c=>{
-            return c.fullName.toLowerCase() === newFullName.toLowerCase()
-        });
-        if (existingContact) {
-            res.status(200);
-            res.send("Contact already exists");
-            return;
-        }
-    }
-    for (let i=0; i<contacts.length; i++) {
-        if (contacts[i].fullName.toLowerCase()===req.params.fullName.toLowerCase()){
-            contacts[i]=updatedContact;
-            break;
-        }
-    }
+    contacts.push(newContact);
 
     res.json(contacts);
 });
 
-app.delete('/contacts/:fullName', (req,res)=>{
+app.put('/contacts/:id', (req,res)=>{
     for (let i=0; i<contacts.length; i++) {
-            if (contacts[i].fullName.toLowerCase()===req.params.fullName.toLowerCase()){
-                contacts.splice(i,1);
-                break;
-            }
+        if (contacts[i].id===req.params.id){
+            contacts[i]=req.body;
+            break;
         }
+    }
+    res.json(contacts);
+});
+
+app.delete('/contacts/:id', (req,res)=>{
+    for (let i=0; i<contacts.length; i++) {
+        if (contacts[i].id==req.params.id){
+            contacts.splice(i,1);
+            break;
+        }
+    }
 
     res.json(contacts);
 });
