@@ -23,7 +23,7 @@ const contacts = [{
                     lastName: "Wright",
                     email: "ka.wright@hotmail.com",
                     phone: "416-555-5555",
-                    picture: null,
+                    picture: "",
                     tags: ["friend"],
                     id: 1
                 }];

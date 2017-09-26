@@ -122,14 +122,14 @@ class Contact extends Component {
     render(){
         return (
             <tr>
-                <td><img src={this.props.details.picture ? this.props.details.picture : "https://www.finearttips.com/wp-content/uploads/2010/05/avatar.jpg"} /> </td>
-                <td>
+                <td className="col-xs-3"><img className="contact-photo" src={this.props.details.picture ? this.props.details.picture : "https://www.finearttips.com/wp-content/uploads/2010/05/avatar.jpg"} /> </td>
+                <td className="col-xs-6">
                     <p>{this.props.details.firstName + " " + this.props.details.lastName}</p>
                     <p>{this.props.details.phone}</p>
                     <p>{this.props.details.email}</p>
                     <p><strong>Tags: </strong>{this.props.details.tags.join(", ")}</p>
                 </td>
-                <td>
+                <td className="col-xs-3">
                   <button onClick={()=>{this.props.deleteContact(this.props.details.id)}}>Delete Contact</button>
                   <button data-toggle="modal" data-target={"#edit"+this.props.details.id}>Edit Contact</button>
                   <EditModal details={this.props.details} editContact={this.props.editContact} />
@@ -218,6 +218,14 @@ class AddModal extends Component {
                             onChange={this.txtFieldChange}
                             className="form-control"
                             type="text" 
+                            placeholder="Image URL" 
+                            name="picture" />
+                        </div>
+                        <div className="form-group">
+                            <input  
+                            onChange={this.txtFieldChange}
+                            className="form-control"
+                            type="text" 
                             placeholder="Tags (separated by commas)" 
                             name="tags" />
                         </div>
@@ -241,7 +249,8 @@ class EditModal extends Component {
       lastName: this.props.details.lastName,
       phone: this.props.details.phone,
       email: this.props.details.email,
-      tags: this.props.details.tags
+      tags: this.props.details.tags,
+      picture: this.props.details.picture
     }
     this.txtFieldChange=this.txtFieldChange.bind(this);
     this.formSubmit=this.formSubmit.bind(this);
@@ -306,6 +315,14 @@ class EditModal extends Component {
                             type="text" 
                             name="email" 
                             value={this.state.email} />
+                        </div>
+                         <div className="form-group">
+                            <input  
+                            onChange={this.txtFieldChange}
+                            className="form-control"
+                            type="text" 
+                            name="picture" 
+                            value={this.state.picture} />
                         </div>
                         <div className="form-group">
                             <input  
