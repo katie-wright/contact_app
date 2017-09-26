@@ -24,7 +24,7 @@ const contacts = [{
                     email: "ka.wright@hotmail.com",
                     phone: "416-555-5555",
                     picture: null,
-                    tags: ["friend", "cool"],
+                    tags: ["friend"],
                     id: 1
                 }];
 
@@ -32,13 +32,13 @@ app.get('/contacts', (req,res)=>{
     res.json(contacts);
 });
 
-app.get('/contacts/:id', (req,res)=>{
-    let contact = contacts.find(c=>{
-        return c.id === req.params.id
-    })
+// app.get('/contacts/:id', (req,res)=>{
+//     let contact = contacts.find(c=>{
+//         return c.id === req.params.id
+//     })
 
-    res.json(contact);
-});
+//     res.json(contact);
+// });
 
 app.post('/contacts', (req,res)=>{
     let newContact = req.body;
@@ -57,10 +57,12 @@ app.put('/contacts/:id', (req,res)=>{
     let contact = contacts.find(c=>{
         return c.id===Number(req.params.id)
     });
-    let updateInfo = req.body.updateInfo;
-    for (const key in updateInfo) {
-        contact[key] = updateInfo[key];
-        console.log("Updated", key)
+    let updateData = req.body;
+    for (const key in updateData) {
+        if (contact[key] !== updateData[key]){
+            contact[key] = updateData[key];
+            console.log("Updated", key)
+        }
     }
     res.json(contacts);
 });
