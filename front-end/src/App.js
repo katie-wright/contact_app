@@ -12,7 +12,8 @@ class App extends Component {
             search: "",
             searchFilter: "",
             sortBy: "",
-            reverse: false
+            reverse: false,
+            showFavourites: false
         }
         this.addContact=this.addContact.bind(this);
         this.deleteContact=this.deleteContact.bind(this);
@@ -89,6 +90,11 @@ class App extends Component {
     }
     render() {
         let contacts=this.state.contacts;
+        if (this.state.showFavourites) {
+          contacts=contacts.filter(contact=>{
+            return contact.favourite
+          })
+        }
         if (this.state.search) {
           contacts=contacts.filter(contact=>{
             if (this.state.searchFilter) {
@@ -141,6 +147,15 @@ class App extends Component {
                   </select>
                 </div>
               </div>
+              <div className="row form-inline">
+                <div className="pull-right">
+                  <label for="filter">Show:</label>
+                  <select className="form-control" name="showFavourites" onChange={this.setStates}>
+                    <option value="">All</option>
+                    <option value="true">Favourites</option>
+                  </select>
+                </div>
+              </div>
               <br />
               <div className="row">
                 <table className="table table-striped">
@@ -160,14 +175,15 @@ class Contact extends Component {
             <tr>
                 <td className="col-xs-3"><img className="contact-photo" src={this.props.details.picture ? this.props.details.picture : "https://www.finearttips.com/wp-content/uploads/2010/05/avatar.jpg"} /> </td>
                 <td className="col-xs-6">
-                    <p><strong>Name: </strong>{this.props.details.firstName + " " + this.props.details.lastName}</p>
+                    <p><strong>Name: </strong>{this.props.details.firstName + " " + this.props.details.lastName}{this.props.details.favourite ? <i className="fa fa-star"/>:null}</p>
                     <p><strong>Phone: </strong>{this.props.details.phone}</p>
                     <p><strong>Email: </strong>{this.props.details.email}</p>
-                    <p><strong>Tags: </strong>{this.props.details.tags.join(", ")}</p>
+                    <p><strong>Tags: </strong>{this.props.details.tags ? this.props.details.tags.join(", "): null}</p>
                 </td>
                 <td className="col-xs-3">
                   <button className="btn btn-info" data-toggle="modal" data-target={"#edit"+this.props.details.id}>Edit Contact</button>
                   <button className="btn btn-danger" onClick={()=>{this.props.deleteContact(this.props.details.id)}}>Delete Contact</button>
+                  <button className="btn btn-success" onClick={()=>{this.props.editContact({"favourite": !this.props.details.favourite}, this.props.details.id)}}>{this.props.details.favourite ? "Unfavourite" : "Favourite"}</button>
                   <EditModal details={this.props.details} editContact={this.props.editContact} />
                 </td>
             </tr>

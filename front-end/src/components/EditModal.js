@@ -29,7 +29,12 @@ class EditModal extends Component {
   }
   formSubmit(e){
     e.preventDefault();
-    this.props.editContact(this.state, this.props.details.id);
+    if (this.state.firstName && this.state.lastName) {
+        this.props.editContact(this.state, this.props.details.id);
+    }
+    else {
+        alert("Please include a first and last name for each contact");
+    }
   }
   render(){
     return (
@@ -95,7 +100,7 @@ class EditModal extends Component {
                             type="text" 
                             name="tags" 
                             placeholder="Tags (separated by commas)"
-                            value={this.state.tags.join(",")} />
+                            value={this.state.tags ? this.state.tags.join(",") : ""} />
                         </div>
                         <div className="form-group">
                             <button onClick={this.formSubmit} className="btn btn-primary" data-dismiss="modal">Update</button>

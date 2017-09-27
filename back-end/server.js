@@ -19,14 +19,51 @@ app.use(function(req, res, next) {
 });
 
 const contacts = [{
-                    firstName: "Katie",
-                    lastName: "Wright",
-                    email: "ka.wright@hotmail.com",
-                    phone: "416-555-5555",
-                    picture: "",
-                    tags: ["friend"],
-                    id: 1
-                }];
+                "id": 1,
+                "firstName": "Roxanna",
+                "lastName": "Covolini",
+                "email": "rcovolini0@gmpg.org",
+                "phone": "595-747-2226",
+                "tags": ["work"],
+                "picture": "",
+                "favourite":true
+                }, {
+                "id": 2,
+                "firstName": "Kenna",
+                "lastName": "Oxer",
+                "email": "koxer1@xing.com",
+                "phone": "628-590-3716",
+                "tags": ["school, home"],
+                "picture": "",
+                "favourite":false
+                }, {
+                "id": 3,
+                "firstName": "Pauline",
+                "lastName": "Chree",
+                "email": "pchree2@qq.com",
+                "phone": "737-669-8862",
+                "tags": ["work"],
+                "picture": "https://thumb1.shutterstock.com/display_pic_with_logo/330511/128709044/stock-photo-business-woman-portrait-crossed-arms-128709044.jpg",
+                "favourite":true
+                }, {
+                "id": 4,
+                "firstName": "Shaine",
+                "lastName": "Ghio",
+                "email": "sghio3@multiply.com",
+                "phone": "332-772-0157",
+                "tags": ["home"],
+                "picture": "",
+                "favourite":false
+                }, {
+                "id": 5,
+                "firstName": "Lanny",
+                "lastName": "Gregorowicz",
+                "email": "lgregorowicz4@google.co.uk",
+                "phone": "461-961-0058",
+                "tags": ["work"],
+                "picture": "https://www.photocase.com/photos/285296-human-being-youth-young-adults-business-masculine-photocase-stock-photo-large.jpeg",
+                "favourite":true
+                }]
 
 app.get('/contacts', (req,res)=>{
     res.json(contacts);

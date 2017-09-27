@@ -8,6 +8,7 @@ class AddModal extends Component {
       lastName: "",
       phone: "",
       email: "",
+      picture: "",
       tags: []
     }
     this.txtFieldChange=this.txtFieldChange.bind(this);
@@ -28,7 +29,12 @@ class AddModal extends Component {
   }
   formSubmit(e){
     e.preventDefault();
-    this.props.addContact(this.state);
+    if (this.state.firstName && this.state.lastName) {
+        this.props.addContact(this.state);
+    }
+    else {
+        alert("Please include a first and last name for each contact");
+    }
   }
   render(){
     return (
