@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import AddModal from './components/AddModal';
+import EditModal from './components/EditModal';
 import './App.css';
 import axios from 'axios';
 
@@ -9,13 +10,15 @@ class App extends Component {
         this.state = {
             contacts: [],
             search: "",
-            searchFilter: ""
+            searchFilter: "",
+            sortBy: "",
+            reverse: false
         }
         this.addContact=this.addContact.bind(this);
         this.deleteContact=this.deleteContact.bind(this);
         this.editContact=this.editContact.bind(this);
-        this.search=this.search.bind(this);
-        this.searchFilter=this.searchFilter.bind(this);
+        this.setStates=this.setStates.bind(this);
+        this.sortBy=this.sortBy.bind(this);
     }
     addContact(contact){
       axios.post('http://localhost:8080/contacts', contact)
@@ -61,15 +64,28 @@ class App extends Component {
                 console.log(err);
             })
     }
-    search(e){
+    setStates(e){
       this.setState({
-        search: e.target.value
+        [e.target.name]: e.target.value
       })
     }
-    searchFilter(e){
+    sortBy(e){
+      let order = e.target.value.substring(0,2);
+      let property = e.target.value.substring(2,e.target.value.length);
       this.setState({
-        searchFilter: e.target.value
+        sortBy: property,
+        reverse: order==="ZA"
       })
+    }
+    arraySort(arr, property){
+      function compare(a,b) {
+        if (a[property] < b[property])
+          return -1;
+        if (a[property] > b[property])
+          return 1;
+        return 0;
+      }
+      return this.state.reverse ? arr.sort(compare).reverse() : arr.sort(compare)
     }
     render() {
         let contacts=this.state.contacts;
@@ -88,6 +104,9 @@ class App extends Component {
               }
             });
         }
+        if (this.state.sortBy) {
+          contacts=this.arraySort(contacts, this.state.sortBy);
+        }
         let contactsJsx = contacts.map(contact=>{
             return <Contact details={contact} deleteContact={this.deleteContact} editContact={this.editContact} />
         })
@@ -98,14 +117,25 @@ class App extends Component {
                   <AddModal addContact={this.addContact} />
                 </div>
                 <div>
-                  <input type="text" placeholder="Search..." onChange={this.search} />
-                  <select id="searchIn" onChange={this.searchFilter}>
+                  <input type="text" name="search" placeholder="Search..." onChange={this.setStates} />
+                  <label for="searchFilter">in: </label>
+                  <select name="searchFilter" onChange={this.setStates}>
                     <option value="">All</option>
                     <option value="firstName">First Name</option>
                     <option value="lastName">Last Name</option>
                     <option value="tags">Tags</option>
                     <option value="email">Email</option>
                     <option value="phone">Phone Number</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="filter">Sort By:</label>
+                  <select name="filter" onChange={this.sortBy}>
+                    <option value="">None</option>
+                    <option value="AZfirstName">First Name A-Z</option>
+                    <option value="ZAfirstName">First Name Z-A</option>
+                    <option value="AZlastName">Last Name A-Z</option>
+                    <option value="ZAlastName">Last Name Z-A</option>
                   </select>
                 </div>
                 <table>
@@ -137,212 +167,6 @@ class Contact extends Component {
             </tr>
         )
     }
-}
-
-class AddModal extends Component {
-  constructor(){
-    super();
-    this.state={
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      tags: []
-    }
-    this.txtFieldChange=this.txtFieldChange.bind(this);
-    this.formSubmit=this.formSubmit.bind(this);
-  }
-  txtFieldChange(e){
-    if (e.target.name==="tags"){
-      let tags=e.target.value.split(",")
-      this.setState({
-        tags: tags
-      })
-    }
-    else {
-      this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
-  }
-  formSubmit(e){
-    e.preventDefault();
-    this.props.addContact(this.state);
-  }
-  render(){
-    return (
-        <div id="add" className="modal fade" role="dialog">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                    <h4 className="modal-title">New Contact</h4>
-                </div>
-                <div className="modal-body">
-                    <div id="auth">
-                        <form>
-                        <div className="form-group">
-                            <input 
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            placeholder="First Name" 
-                            name="firstName" />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            placeholder="Last Name" 
-                            name="lastName" />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            placeholder="Phone Number" 
-                            name="phone" />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            placeholder="Email" 
-                            name="email" />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            placeholder="Image URL" 
-                            name="picture" />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            placeholder="Tags (separated by commas)" 
-                            name="tags" />
-                        </div>
-                        <div className="form-group">
-                            <button onClick={this.formSubmit} className="btn btn-primary" data-dismiss="modal">Add</button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-    )
-  }
-}
-class EditModal extends Component {
-  constructor(props){
-    super(props);
-    this.state={
-      firstName: this.props.details.firstName,
-      lastName: this.props.details.lastName,
-      phone: this.props.details.phone,
-      email: this.props.details.email,
-      tags: this.props.details.tags,
-      picture: this.props.details.picture
-    }
-    this.txtFieldChange=this.txtFieldChange.bind(this);
-    this.formSubmit=this.formSubmit.bind(this);
-  }
-  txtFieldChange(e){
-    if (e.target.name==="tags"){
-      let tags=e.target.value.split(",")
-      this.setState({
-        tags: tags
-      })
-    }
-    else {
-      this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
-  }
-  formSubmit(e){
-    e.preventDefault();
-    this.props.editContact(this.state, this.props.details.id);
-  }
-  render(){
-    return (
-        <div id={"edit"+this.props.details.id} className="modal fade" role="dialog">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                    <h4 className="modal-title">Update Contact</h4>
-                </div>
-                <div className="modal-body">
-                    <div id="auth">
-                        <form>
-                        <div className="form-group">
-                            <input 
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            name="firstName"
-                            value={this.state.firstName} />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text"  
-                            name="lastName" 
-                            value={this.state.lastName} />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            name="phone" 
-                            value={this.state.phone}/>
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            name="email" 
-                            value={this.state.email} />
-                        </div>
-                         <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            name="picture" 
-                            value={this.state.picture} />
-                        </div>
-                        <div className="form-group">
-                            <input  
-                            onChange={this.txtFieldChange}
-                            className="form-control"
-                            type="text" 
-                            name="tags" 
-                            value={this.state.tags.join(",")} />
-                        </div>
-                        <div className="form-group">
-                            <button onClick={this.formSubmit} className="btn btn-primary" data-dismiss="modal">Update</button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-    )
-  }
 }
 
 export default App;
