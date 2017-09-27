@@ -49,6 +49,7 @@ class EditModal extends Component {
                             className="form-control"
                             type="text" 
                             name="firstName"
+                            placeholder="First Name"
                             value={this.state.firstName} />
                         </div>
                         <div className="form-group">
@@ -57,6 +58,7 @@ class EditModal extends Component {
                             className="form-control"
                             type="text"  
                             name="lastName" 
+                            placeholder="Last Name"
                             value={this.state.lastName} />
                         </div>
                         <div className="form-group">
@@ -65,6 +67,7 @@ class EditModal extends Component {
                             className="form-control"
                             type="text" 
                             name="phone" 
+                            placeholder="Phone Number"
                             value={this.state.phone}/>
                         </div>
                         <div className="form-group">
@@ -73,6 +76,7 @@ class EditModal extends Component {
                             className="form-control"
                             type="text" 
                             name="email" 
+                            placeholder="Email"
                             value={this.state.email} />
                         </div>
                          <div className="form-group">
@@ -81,6 +85,7 @@ class EditModal extends Component {
                             className="form-control"
                             type="text" 
                             name="picture" 
+                            placeholder="Image URL"
                             value={this.state.picture} />
                         </div>
                         <div className="form-group">
@@ -89,6 +94,7 @@ class EditModal extends Component {
                             className="form-control"
                             type="text" 
                             name="tags" 
+                            placeholder="Tags (separated by commas)"
                             value={this.state.tags.join(",")} />
                         </div>
                         <div className="form-group">

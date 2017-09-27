@@ -112,25 +112,27 @@ class App extends Component {
         })
         return (
             <div className="container" >
-                <div>
-                  <button data-toggle="modal" data-target="#add">Add New Contact </button>
-                  <AddModal addContact={this.addContact} />
-                </div>
-                <div>
-                  <input type="text" name="search" placeholder="Search..." onChange={this.setStates} />
-                  <label for="searchFilter">in: </label>
-                  <select name="searchFilter" onChange={this.setStates}>
-                    <option value="">All</option>
-                    <option value="firstName">First Name</option>
-                    <option value="lastName">Last Name</option>
-                    <option value="tags">Tags</option>
-                    <option value="email">Email</option>
-                    <option value="phone">Phone Number</option>
-                  </select>
-                </div>
-                <div>
+              <h1 className="text-center">My Contacts</h1>
+              <div className="row">
+                <button className="btn btn-primary pull-right" data-toggle="modal" data-target="#add">Add New Contact </button>
+                <AddModal addContact={this.addContact} />
+              </div>
+              <div className="row form-inline">
+                <input className="form-control" type="text" name="search" placeholder="Search..." onChange={this.setStates} />
+                <label for="searchFilter">in: </label>
+                <select className="form-control" name="searchFilter" onChange={this.setStates}>
+                  <option value="">All</option>
+                  <option value="firstName">First Name</option>
+                  <option value="lastName">Last Name</option>
+                  <option value="tags">Tags</option>
+                  <option value="email">Email</option>
+                  <option value="phone">Phone Number</option>
+                </select>
+              </div>
+              <div className="row form-inline">
+                <div className="pull-right">
                   <label for="filter">Sort By:</label>
-                  <select name="filter" onChange={this.sortBy}>
+                  <select className="form-control" name="filter" onChange={this.sortBy}>
                     <option value="">None</option>
                     <option value="AZfirstName">First Name A-Z</option>
                     <option value="ZAfirstName">First Name Z-A</option>
@@ -138,11 +140,15 @@ class App extends Component {
                     <option value="ZAlastName">Last Name Z-A</option>
                   </select>
                 </div>
-                <table>
+              </div>
+              <br />
+              <div className="row">
+                <table className="table table-striped">
                     <tbody>
                         {contacts.length>0 ? contactsJsx : "No contacts found"}
                     </tbody>
                 </table>
+              </div>
             </div>
         )
     }
@@ -154,14 +160,14 @@ class Contact extends Component {
             <tr>
                 <td className="col-xs-3"><img className="contact-photo" src={this.props.details.picture ? this.props.details.picture : "https://www.finearttips.com/wp-content/uploads/2010/05/avatar.jpg"} /> </td>
                 <td className="col-xs-6">
-                    <p>{this.props.details.firstName + " " + this.props.details.lastName}</p>
-                    <p>{this.props.details.phone}</p>
-                    <p>{this.props.details.email}</p>
+                    <p><strong>Name: </strong>{this.props.details.firstName + " " + this.props.details.lastName}</p>
+                    <p><strong>Phone: </strong>{this.props.details.phone}</p>
+                    <p><strong>Email: </strong>{this.props.details.email}</p>
                     <p><strong>Tags: </strong>{this.props.details.tags.join(", ")}</p>
                 </td>
                 <td className="col-xs-3">
-                  <button onClick={()=>{this.props.deleteContact(this.props.details.id)}}>Delete Contact</button>
-                  <button data-toggle="modal" data-target={"#edit"+this.props.details.id}>Edit Contact</button>
+                  <button className="btn btn-info" data-toggle="modal" data-target={"#edit"+this.props.details.id}>Edit Contact</button>
+                  <button className="btn btn-danger" onClick={()=>{this.props.deleteContact(this.props.details.id)}}>Delete Contact</button>
                   <EditModal details={this.props.details} editContact={this.props.editContact} />
                 </td>
             </tr>
