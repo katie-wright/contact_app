@@ -11,7 +11,7 @@ app.listen(PORT, ()=>{
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(__dirname + './front-end/build'));
+app.use(express.static(__dirname + '/front-end/build'));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -110,5 +110,5 @@ app.delete('/contacts/:id', (req,res)=>{
 });
 
 app.get('*', (req, res) => {
-    res.sendFile('index.html',{root: __dirname + './front-end/build'});
+    res.sendFile('index.html',{root: __dirname + '/front-end/build'});
 });
