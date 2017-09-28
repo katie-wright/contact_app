@@ -82,12 +82,20 @@ class App extends Component {
       })
     }
     sortBy(e){
-      let order = e.target.value.substring(0,2);
-      let property = e.target.value.substring(2,e.target.value.length);
-      this.setState({
-        sortBy: property,
-        reverse: order==="ZA"
-      })
+      if (e.target.value.length>0) {
+        let order = e.target.value.substring(0,2);
+        let property = e.target.value.substring(2,e.target.value.length);
+        this.setState({
+          sortBy: property,
+          reverse: order==="ZA"
+        })
+      }
+      else {
+        this.setState({
+          sortBy: "",
+          reverse: false
+        })
+      }
     }
     arraySort(arr, property){
       function compare(a,b) {
@@ -191,7 +199,7 @@ class Contact extends Component {
     render(){
         return (
             <tr>
-                <td className="col-xs-3"><img className="contact-photo" src={this.props.details.picture ? this.props.details.picture : "https://www.finearttips.com/wp-content/uploads/2010/05/avatar.jpg"} /> </td>
+                <td className="col-xs-3"><img alt={"photo_for_contact_"+this.props.details.id} className="contact-photo" src={this.props.details.picture ? this.props.details.picture : "https://www.finearttips.com/wp-content/uploads/2010/05/avatar.jpg"} /> </td>
                 <td className="col-xs-6">
                     <p><strong>Name: </strong>{this.props.details.firstName + " " + this.props.details.lastName}{this.props.details.favourite ? <i className="fa fa-star"/>:null}</p>
                     <p><strong>Phone: </strong>{this.props.details.phone}</p>

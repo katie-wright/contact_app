@@ -16,10 +16,9 @@ class AddModal extends Component {
   }
   txtFieldChange(e){
     if (e.target.name==="tags"){
-      let tags=e.target.value.split(",")
-      this.setState({
-        tags: tags
-      })
+        this.setState({
+            tags: e.target.value!=="" ? e.target.value.split(",") : []
+        })
     }
     else {
       this.setState({
