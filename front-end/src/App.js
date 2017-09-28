@@ -23,7 +23,7 @@ class App extends Component {
         this.sortBy=this.sortBy.bind(this);
     }
     componentWillMount() {
-    axios.get('http://localhost:8080/contacts')
+    axios.get('https://localhost:8080/contacts')
         .then(res=>{
             this.setState({
                 contacts: res.data
@@ -34,7 +34,7 @@ class App extends Component {
         })
     }
     addContact(contact){
-      axios.post('http://localhost:8080/contacts', contact)
+      axios.post('https://localhost:8080/contacts', contact)
         .then(res=>{
           this.setState({
             contacts: res.data
@@ -45,7 +45,7 @@ class App extends Component {
         })
     }
     deleteContact(id) {
-      axios.delete('http://localhost:8080/contacts/'+id)
+      axios.delete('https://localhost:8080/contacts/'+id)
         .then(res=>{
           this.setState({
             contacts: res.data
@@ -56,7 +56,7 @@ class App extends Component {
         })
     }
     editContact(updateData, id){
-      axios.put('http://localhost:8080/contacts/'+id, updateData)
+      axios.put('https://localhost:8080/contacts/'+id, updateData)
         .then(res=>{
           this.setState({
             contacts: res.data
