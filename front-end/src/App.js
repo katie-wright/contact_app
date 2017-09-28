@@ -18,6 +18,7 @@ class App extends Component {
         this.addContact=this.addContact.bind(this);
         this.deleteContact=this.deleteContact.bind(this);
         this.editContact=this.editContact.bind(this);
+        this.reset=this.reset.bind(this);
         this.setStates=this.setStates.bind(this);
         this.sortBy=this.sortBy.bind(this);
     }
@@ -64,6 +65,16 @@ class App extends Component {
             .catch(err=>{
                 console.log(err);
             })
+    }
+    reset(){
+      this.setState({
+        search: "",
+        searchFilter: "",
+        sortBy: "",
+        reverse: false,
+        showFavourites: false
+      });
+      document.getElementById("sortBy").value = "";
     }
     setStates(e){
       this.setState({
@@ -113,8 +124,8 @@ class App extends Component {
         if (this.state.sortBy) {
           contacts=this.arraySort(contacts, this.state.sortBy);
         }
-        let contactsJsx = contacts.map(contact=>{
-            return <Contact details={contact} deleteContact={this.deleteContact} editContact={this.editContact} />
+        let contactsJsx = contacts.map((contact,i)=>{
+            return <Contact details={contact} deleteContact={this.deleteContact} editContact={this.editContact} key={i}/>
         })
         return (
             <div className="container" >
@@ -124,9 +135,9 @@ class App extends Component {
                 <AddModal addContact={this.addContact} />
               </div>
               <div className="row form-inline">
-                <input className="form-control" type="text" name="search" placeholder="Search..." onChange={this.setStates} />
+                <input className="form-control" type="text" name="search" placeholder="Search..." onChange={this.setStates} value={this.state.search}/>
                 <label for="searchFilter">in: </label>
-                <select className="form-control" name="searchFilter" onChange={this.setStates}>
+                <select className="form-control" name="searchFilter" onChange={this.setStates} value={this.state.searchFilter} >
                   <option value="">All</option>
                   <option value="firstName">First Name</option>
                   <option value="lastName">Last Name</option>
@@ -137,8 +148,8 @@ class App extends Component {
               </div>
               <div className="row form-inline">
                 <div className="pull-right">
-                  <label for="filter">Sort By:</label>
-                  <select className="form-control" name="filter" onChange={this.sortBy}>
+                  <label for="sortBy">Sort By:</label>
+                  <select className="form-control" name="sortBy" id="sortBy" onChange={this.sortBy}>
                     <option value="">None</option>
                     <option value="AZfirstName">First Name A-Z</option>
                     <option value="ZAfirstName">First Name Z-A</option>
@@ -150,19 +161,26 @@ class App extends Component {
               <div className="row form-inline">
                 <div className="pull-right">
                   <label for="filter">Show:</label>
-                  <select className="form-control" name="showFavourites" onChange={this.setStates}>
+                  <select className="form-control" name="showFavourites" onChange={this.setStates} value={this.state.showFavourites} >
                     <option value="">All</option>
                     <option value="true">Favourites</option>
                   </select>
                 </div>
               </div>
+              <div className="row form-inline">
+                <div className="pull-right">
+                  <button className="btn" onClick={this.reset}>Reset Filters</button>
+                </div>
+              </div>
               <br />
               <div className="row">
+                {contacts.length>0 ? 
                 <table className="table table-striped">
                     <tbody>
-                        {contacts.length>0 ? contactsJsx : "No contacts found"}
+                        {contactsJsx}
                     </tbody>
-                </table>
+                </table> 
+                : "No contacts found"}
               </div>
             </div>
         )
@@ -181,8 +199,10 @@ class Contact extends Component {
                     <p><strong>Tags: </strong>{this.props.details.tags ? this.props.details.tags.join(", "): null}</p>
                 </td>
                 <td className="col-xs-3">
-                  <button className="btn btn-info" data-toggle="modal" data-target={"#edit"+this.props.details.id}>Edit Contact</button>
-                  <button className="btn btn-danger" onClick={()=>{this.props.deleteContact(this.props.details.id)}}>Delete Contact</button>
+                  <button className="btn btn-info" data-toggle="modal" data-target={"#edit"+this.props.details.id}>Edit</button>
+                  <br />
+                  <button className="btn btn-danger" onClick={()=>{this.props.deleteContact(this.props.details.id)}}>Delete</button>
+                  <br />
                   <button className="btn btn-success" onClick={()=>{this.props.editContact({"favourite": !this.props.details.favourite}, this.props.details.id)}}>{this.props.details.favourite ? "Unfavourite" : "Favourite"}</button>
                   <EditModal details={this.props.details} editContact={this.props.editContact} />
                 </td>
