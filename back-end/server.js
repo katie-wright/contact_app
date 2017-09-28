@@ -11,6 +11,8 @@ app.listen(PORT, ()=>{
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.static(__dirname + './../front-end/build'));
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "PUT, DELETE");
@@ -69,14 +71,6 @@ app.get('/contacts', (req,res)=>{
     res.json(contacts);
 });
 
-// app.get('/contacts/:id', (req,res)=>{
-//     let contact = contacts.find(c=>{
-//         return c.id === req.params.id
-//     })
-
-//     res.json(contact);
-// });
-
 app.post('/contacts', (req,res)=>{
     let newContact = req.body;
     if (contacts.length>0) {
@@ -113,4 +107,8 @@ app.delete('/contacts/:id', (req,res)=>{
     }
 
     res.json(contacts);
+});
+
+app.get('*', (req, res) => {
+    res.sendFile('index.html',{root: __dirname + './../front-end/build'});
 });
