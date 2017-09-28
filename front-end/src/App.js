@@ -22,6 +22,17 @@ class App extends Component {
         this.setStates=this.setStates.bind(this);
         this.sortBy=this.sortBy.bind(this);
     }
+    componentWillMount() {
+    axios.get('http://localhost:8080/contacts')
+        .then(res=>{
+            this.setState({
+                contacts: res.data
+            });
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
     addContact(contact){
       axios.post('http://localhost:8080/contacts', contact)
         .then(res=>{
@@ -54,17 +65,6 @@ class App extends Component {
         .catch(err=>{
           console.log(err);
         })
-    }
-    componentWillMount() {
-        axios.get('http://localhost:8080/contacts')
-            .then(res=>{
-                this.setState({
-                    contacts: res.data
-                });
-            })
-            .catch(err=>{
-                console.log(err);
-            })
     }
     reset(){
       this.setState({

@@ -31,6 +31,14 @@ class AddModal extends Component {
     e.preventDefault();
     if (this.state.firstName && this.state.lastName) {
         this.props.addContact(this.state);
+        this.setState({
+            firstName: "",
+            lastName: "",
+            phone: "",
+            email: "",
+            picture: "",
+            tags: []
+        });
     }
     else {
         alert("Please include a first and last name for each contact");
@@ -54,7 +62,8 @@ class AddModal extends Component {
                             className="form-control"
                             type="text" 
                             placeholder="First Name" 
-                            name="firstName" />
+                            name="firstName"
+                            value={this.state.firstName} />
                         </div>
                         <div className="form-group">
                             <input  
@@ -62,7 +71,8 @@ class AddModal extends Component {
                             className="form-control"
                             type="text" 
                             placeholder="Last Name" 
-                            name="lastName" />
+                            name="lastName" 
+                            value={this.state.lastName} />
                         </div>
                         <div className="form-group">
                             <input  
@@ -70,7 +80,8 @@ class AddModal extends Component {
                             className="form-control"
                             type="text" 
                             placeholder="Phone Number" 
-                            name="phone" />
+                            name="phone" 
+                            value={this.state.phone} />
                         </div>
                         <div className="form-group">
                             <input  
@@ -78,7 +89,8 @@ class AddModal extends Component {
                             className="form-control"
                             type="text" 
                             placeholder="Email" 
-                            name="email" />
+                            name="email" 
+                            value={this.state.email} />
                         </div>
                         <div className="form-group">
                             <input  
@@ -86,7 +98,8 @@ class AddModal extends Component {
                             className="form-control"
                             type="text" 
                             placeholder="Image URL" 
-                            name="picture" />
+                            name="picture"
+                            value={this.state.picture} />
                         </div>
                         <div className="form-group">
                             <input  
@@ -94,7 +107,8 @@ class AddModal extends Component {
                             className="form-control"
                             type="text" 
                             placeholder="Tags (separated by commas)" 
-                            name="tags" />
+                            name="tags" 
+                            value={this.state.tags.join(", ")} />
                         </div>
                         <div className="form-group">
                             <button onClick={this.formSubmit} className="btn btn-primary" data-dismiss="modal">Add</button>
