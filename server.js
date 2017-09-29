@@ -35,7 +35,7 @@ const contacts = [{
                 "lastName": "Oxer",
                 "email": "koxer1@xing.com",
                 "phone": "628-590-3716",
-                "tags": ["school, home"],
+                "tags": ["school", "home"],
                 "picture": "",
                 "favourite":false
                 }, {
@@ -44,7 +44,7 @@ const contacts = [{
                 "lastName": "Chree",
                 "email": "pchree2@qq.com",
                 "phone": "737-669-8862",
-                "tags": ["work"],
+                "tags": ["family"],
                 "picture": "https://thumb1.shutterstock.com/display_pic_with_logo/330511/128709044/stock-photo-business-woman-portrait-crossed-arms-128709044.jpg",
                 "favourite":true
                 }, {

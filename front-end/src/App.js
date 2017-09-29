@@ -9,11 +9,13 @@ class App extends Component {
         super();
         this.state = {
             contacts: [],
+            tags: [],
             search: "",
             searchFilter: "",
             sortBy: "",
             reverse: false,
-            showFavourites: false
+            showFavourites: false,
+            filterTags: ""
         }
         this.addContact=this.addContact.bind(this);
         this.deleteContact=this.deleteContact.bind(this);
@@ -27,7 +29,7 @@ class App extends Component {
         .then(res=>{
             this.setState({
                 contacts: res.data
-            });
+            }, this.getTags);
         })
         .catch(err=>{
             console.log(err);
@@ -38,7 +40,7 @@ class App extends Component {
         .then(res=>{
           this.setState({
             contacts: res.data
-          })
+          }, this.getTags);
         })
         .catch(err=>{
           console.log(err);
@@ -49,7 +51,7 @@ class App extends Component {
         .then(res=>{
           this.setState({
             contacts: res.data
-          });
+          }, this.getTags);
         })
         .catch(err=>{
           console.log(err);
@@ -60,7 +62,7 @@ class App extends Component {
         .then(res=>{
           this.setState({
             contacts: res.data
-          });
+          }, this.getTags);
         })
         .catch(err=>{
           console.log(err);
@@ -72,14 +74,22 @@ class App extends Component {
         searchFilter: "",
         sortBy: "",
         reverse: false,
-        showFavourites: false
+        showFavourites: false,
+        filterTags: ""
       });
       document.getElementById("sortBy").value = "";
     }
     setStates(e){
-      this.setState({
-        [e.target.name]: e.target.value
-      })
+      if (e.target.name==="showFavourites"){
+        this.setState({
+          showFavourites: !this.state.showFavourites
+        })
+      }
+      else {
+        this.setState({
+          [e.target.name]: e.target.value
+        })
+      }
     }
     sortBy(e){
       if (e.target.value.length>0) {
@@ -97,11 +107,23 @@ class App extends Component {
         })
       }
     }
+    getTags(){
+      let allTags=[];
+      this.state.contacts.forEach(contact=>{
+        allTags=allTags.concat(contact.tags);
+      });
+      let tags=allTags.filter((item, pos, self)=>{
+        return self.indexOf(item) === pos
+      });
+      this.setState({
+        tags: tags
+      }); 
+    }
     arraySort(arr, property){
       function compare(a,b) {
-        if (a[property] < b[property])
+        if (a[property].toLowerCase() < b[property].toLowerCase())
           return -1;
-        if (a[property] > b[property])
+        if (a[property].toLowerCase() > b[property].toLowerCase())
           return 1;
         return 0;
       }
@@ -112,6 +134,16 @@ class App extends Component {
         if (this.state.showFavourites) {
           contacts=contacts.filter(contact=>{
             return contact.favourite
+          })
+        }
+        if (this.state.filterTags) {
+          contacts=contacts.filter(contact=>{
+            for (let i=0; i<contact.tags.length; i++){
+              if (contact.tags[i]===this.state.filterTags) {
+                return true;
+              }
+            }
+            return false;
           })
         }
         if (this.state.search) {
@@ -135,6 +167,9 @@ class App extends Component {
         let contactsJsx = contacts.map((contact,i)=>{
             return <Contact details={contact} deleteContact={this.deleteContact} editContact={this.editContact} key={i}/>
         })
+        let tagsJsx = this.state.tags.map((tag,i)=>{
+          return <option value={tag} key={i}>{tag}</option>
+        })
         return (
             <div className="container" >
               <h1 className="text-center">My Contacts</h1>
@@ -149,7 +184,6 @@ class App extends Component {
                   <option value="">All</option>
                   <option value="firstName">First Name</option>
                   <option value="lastName">Last Name</option>
-                  <option value="tags">Tags</option>
                   <option value="email">Email</option>
                   <option value="phone">Phone Number</option>
                 </select>
@@ -168,11 +202,16 @@ class App extends Component {
               </div>
               <div className="row form-inline">
                 <div className="pull-right">
-                  <label for="filter">Show:</label>
-                  <select className="form-control" name="showFavourites" onChange={this.setStates} value={this.state.showFavourites} >
+                  <label for="filterTags">Show:</label>
+                  <select className="form-control" name="filterTags" onChange={this.setStates} value={this.state.filterTags} >
                     <option value="">All</option>
-                    <option value="true">Favourites</option>
+                    {tagsJsx}
                   </select>
+                  </div>
+              </div>
+              <div className="row form-inline">
+                <div className="pull-right">
+                  <input type="checkbox" name="showFavourites" onClick={this.setStates} checked={this.state.showFavourites} />Favourites Only
                 </div>
               </div>
               <div className="row form-inline">
