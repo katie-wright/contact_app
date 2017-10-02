@@ -107,7 +107,7 @@ class AddModal extends Component {
                             type="text" 
                             placeholder="Tags (separated by commas)" 
                             name="tags" 
-                            value={this.state.tags.join(", ")} />
+                            value={this.state.tags ? this.state.tags.join(",") : ""} />
                         </div>
                         <div className="form-group">
                             <button onClick={this.formSubmit} className="btn btn-primary" data-dismiss="modal">Add</button>

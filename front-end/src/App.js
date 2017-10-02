@@ -186,6 +186,7 @@ class App extends Component {
                   <option value="lastName">Last Name</option>
                   <option value="email">Email</option>
                   <option value="phone">Phone Number</option>
+                  <option value="tags">Tags</option>
                 </select>
               </div>
               <div className="row form-inline">
@@ -202,7 +203,7 @@ class App extends Component {
               </div>
               <div className="row form-inline">
                 <div className="pull-right">
-                  <label for="filterTags">Show:</label>
+                  <label for="filterTags">Filter by Tag:</label>
                   <select className="form-control" name="filterTags" onChange={this.setStates} value={this.state.filterTags} >
                     <option value="">All</option>
                     {tagsJsx}
