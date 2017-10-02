@@ -14,6 +14,18 @@ class EditModal extends Component {
     this.txtFieldChange=this.txtFieldChange.bind(this);
     this.formSubmit=this.formSubmit.bind(this);
   }
+  componentWillReceiveProps(nextProps){
+    if (this.props.details.firstName !== nextProps.details.firstName) {
+        this.setState({
+            firstName: nextProps.details.firstName,
+            lastName: nextProps.details.lastName,
+            phone: nextProps.details.phone,
+            email: nextProps.details.email,
+            tags: nextProps.details.tags,
+            picture: nextProps.details.picture
+        })
+    }
+  }
   txtFieldChange(e){
     if (e.target.name==="tags"){
       let tags=e.target.value.split(",")
